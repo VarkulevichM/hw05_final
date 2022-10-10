@@ -197,8 +197,6 @@ class PostPagesTest(TestCase):
         self.assertNotEqual(response_old, response_new)
 
 
-
-
 class PaginatorViewsTest(TestCase):
     @classmethod
     def setUpClass(cls):
