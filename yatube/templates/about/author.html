@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Об авторе проекта{% endblock %}
+{% block content %}
+<h1>Привет, я автор</h1>
+<p>
+  <a href="https://github.com/VarkulevichM" target="_blank">
+        Мой github</a>
+
+</p>
+<p> коты, просто коты)</p>
+<div class="shadow-lg">
+  <img src="{% static 'img/кот.png' %}" class="img-thumbnail" width="400">
+  <img src="{% static 'img/кот2.png' %}" class="img-thumbnail">
+</div>
+{% endblock %}
