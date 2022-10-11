@@ -1,3 +1,4 @@
+from django.core.cache import cache
 from django.test import Client
 from django.test import TestCase
 from http import HTTPStatus
@@ -43,6 +44,8 @@ class PostURLTests(TestCase):
         # Авторизированный автор
         self.authorized_author = Client()
         self.authorized_author.force_login(self.post.author)
+        # Очистка кеша, без него проверка не проходилась
+        cache.clear()
 
     def test_urls_redirect_guest_client(self):
         """Проверка редиректа пользователя, который не авторизовался."""
