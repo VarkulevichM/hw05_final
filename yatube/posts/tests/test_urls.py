@@ -68,6 +68,11 @@ class PostURLTests(TestCase):
         response = self.guest_client.get("/unexisting_page/")
         self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
 
+    def test_404_page_uses_custom_template(self):
+        """Cтраница 404 использует кастомный шаблон."""
+        response = self.authorized_client.get("/unexisting_page/")
+        self.assertTemplateUsed(response, "core/404.html")
+
     def test_urls_uses_correct_template_authorized_users(self):
         """URL-адрес использует соответствующий шаблон."""
         new_dict = {**URL_CONSISTING_KNOWN_VALUES,
@@ -76,8 +81,3 @@ class PostURLTests(TestCase):
             with self.subTest(url=url):
                 response = self.authorized_author.get(url)
                 self.assertTemplateUsed(response, template)
-
-    def test_404_page_uses_custom_template(self):
-        """Cтраница 404 использует кастомный шаблон."""
-        response = self.authorized_client.get("/unexisting_page/")
-        self.assertTemplateUsed(response, "core/404.html")

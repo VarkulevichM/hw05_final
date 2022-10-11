@@ -6,6 +6,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django import forms
 from django.conf import settings
+from posts.models import Follow
 from posts.models import Group
 from posts.models import Post
 from posts.models import User
@@ -14,6 +15,7 @@ import shutil
 import tempfile
 
 POSTS_ON_SECOND_PAGE = 1
+NUMBER_REMOVAL_FROM_FOLLOW = 0
 TEMP_MEDIA_ROOT = tempfile.mkdtemp(dir=settings.BASE_DIR)
 
 
@@ -22,7 +24,10 @@ class PostPagesTest(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+
         cls.user = User.objects.create_user(username="Rick")
+        cls.follower = User.objects.create_user(username="Mo")
+
         cls.group = Group.objects.create(
             title="Название группы",
             slug="slug-test",
@@ -60,6 +65,14 @@ class PostPagesTest(TestCase):
         # Авторизированный пользователь
         self.authorized_client = Client()
         self.authorized_client.force_login(self.user)
+        # Авторизированный автор
+        self.authorized_author = Client()
+        self.authorized_author.force_login(self.post.author)
+        # Подписчик на автора
+        self.follower_client = Client()
+        self.follower_client.force_login(self.follower)
+        self.create_follow = Follow.objects.create(author=self.user, user=self.follower)
+        # Очистка кеша
         cache.clear()
 
     def test_pages_uses_correct_template(self):
@@ -195,6 +208,34 @@ class PostPagesTest(TestCase):
         response_new = self.authorized_client.get(
             reverse("posts:index")).content
         self.assertNotEqual(response_old, response_new)
+
+    def test_authorized_user_follow(self):
+        """Проверка, что авторизированный пользователь
+         может подписываться на других пользователей и удалять их из подписок"""
+        response = self.follower_client.get(
+            reverse("posts:follow_index"))
+        self.assertEqual(len(
+            response.context["page_obj"]), POSTS_ON_SECOND_PAGE)
+
+        self.create_follow.delete()
+
+        response = self.follower_client.get(
+            reverse("posts:follow_index"))
+        self.assertEqual(len(
+            response.context["page_obj"]), NUMBER_REMOVAL_FROM_FOLLOW )
+
+    def test_authorized_us(self):
+        """ Проверка, что новая запись пользователя появляется в ленте тех,
+        кто на него подписан и не появляется в ленте тех, кто не подписан. """
+        response = self.follower_client.get(
+            reverse("posts:follow_index"))
+        self.assertEqual(len(
+            response.context["page_obj"]), POSTS_ON_SECOND_PAGE)
+
+        response = self.authorized_client.get(
+            reverse("posts:follow_index"))
+        self.assertNotEqual(len(
+            response.context["page_obj"]), POSTS_ON_SECOND_PAGE)
 
 
 class PaginatorViewsTest(TestCase):
