@@ -107,13 +107,10 @@ class PostFormTest(TestCase):
     def test_comment_add(self):
         """Проверка создания комментария авторизированным пользователем"""
         comment_count = Comment.objects.count()
-        form_data = {
-           "text": "текст комментария"
-        }
+        form_data = {"text": "текст комментария"}
         response = self.authorized_client.post(
            reverse("posts:add_comment", kwargs={"post_id": self.post.id}),
-           data=form_data
-        )
+           data=form_data)
         self.assertRedirects(response, reverse(
             "posts:post_detail", kwargs={"post_id": self.post.id}))
         self.assertEqual(

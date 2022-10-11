@@ -71,7 +71,8 @@ class PostPagesTest(TestCase):
         # Подписчик на автора
         self.follower_client = Client()
         self.follower_client.force_login(self.follower)
-        self.create_follow = Follow.objects.create(author=self.user, user=self.follower)
+        self.create_follow = Follow.objects.create(
+            author=self.user, user=self.follower)
         # Очистка кеша
         cache.clear()
 
@@ -211,7 +212,8 @@ class PostPagesTest(TestCase):
 
     def test_authorized_user_follow(self):
         """Проверка, что авторизированный пользователь
-         может подписываться на других пользователей и удалять их из подписок"""
+         может подписываться на других пользователей
+         и удалять их из подписок"""
         response = self.follower_client.get(
             reverse("posts:follow_index"))
         self.assertEqual(len(
@@ -222,7 +224,7 @@ class PostPagesTest(TestCase):
         response = self.follower_client.get(
             reverse("posts:follow_index"))
         self.assertEqual(len(
-            response.context["page_obj"]), NUMBER_REMOVAL_FROM_FOLLOW )
+            response.context["page_obj"]), NUMBER_REMOVAL_FROM_FOLLOW)
 
     def test_authorized_us(self):
         """ Проверка, что новая запись пользователя появляется в ленте тех,
