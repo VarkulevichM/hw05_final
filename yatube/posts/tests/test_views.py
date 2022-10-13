@@ -1,3 +1,5 @@
+import shutil
+import tempfile
 from django.core.cache import cache
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client
@@ -5,14 +7,26 @@ from django.test import override_settings
 from django.test import TestCase
 from django.urls import reverse
 from django import forms
+
 from django.conf import settings
 from posts.models import Follow
 from posts.models import Group
 from posts.models import Post
 from posts.models import User
 from posts.utils import COUNT_POST_PER_PAGE
-import shutil
-import tempfile
+from posts.consts import USERNAME
+from posts.consts import TITLE
+from posts.consts import SLUG
+from posts.consts import DESCRIPTION
+from posts.consts import TEXT
+
+USERNAME = "Rick"
+TITLE = "Название группы"
+SLUG = "slug-test"
+DESCRIPTION = "Текстовое описание группы"
+TEXT = "Текст поста"
+
+
 
 POSTS_ON_SECOND_PAGE = 1
 NUMBER_REMOVAL_FROM_FOLLOW = 0

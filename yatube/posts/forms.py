@@ -1,6 +1,7 @@
 from django import forms
-from . models import Comment
-from . models import Post
+
+from posts.models import Comment
+from posts.models import Post
 
 
 class PostForm(forms.ModelForm):
@@ -21,8 +22,8 @@ class PostForm(forms.ModelForm):
 
     def clean_text(self):
         data = self.cleaned_data["text"]
-        if len(data) == 0:
-            raise forms.ValidationError("Заполните это поле")
+        if len(data) < 5:
+            raise forms.ValidationError("Пост должен быть длиннее")
         return data
 
 

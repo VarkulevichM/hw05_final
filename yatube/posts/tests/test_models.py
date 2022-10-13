@@ -1,22 +1,28 @@
 from django.test import TestCase
+
 from posts.models import Group
 from posts.models import Post
 from posts.models import User
+from posts.consts import USERNAME
+from posts.consts import TITLE
+from posts.consts import SLUG
+from posts.consts import DESCRIPTION
+from posts.consts import TEXT
 
 
 class PostModelTest(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.user = User.objects.create_user(username="Morty")
+        cls.user = User.objects.create_user(username=USERNAME)
         cls.group = Group.objects.create(
-            title="Тестовая группа",
-            slug="Тестовый слаг",
-            description="текстовое описание сообщества"
+            title=TITLE,
+            slug=SLUG,
+            description=DESCRIPTION
         )
         cls.post = Post.objects.create(
             author=cls.user,
-            text="Тестовый пост"
+            text=TEXT
         )
 
     def test_models_have_correct_object_post(self):

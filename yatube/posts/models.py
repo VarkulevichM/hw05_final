@@ -1,15 +1,19 @@
-from django.db import models
 from django.contrib.auth import get_user_model
+from django.db import models
 
+from posts.consts import FIRST_POST_CHARACTERS
 
 User = get_user_model()
-FIRST_POST_CHARACTERS = 15
 
 
 class Group(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField(unique=True)
     description = models.TextField()
+
+    class Meta:
+        verbose_name = "Группа"
+        verbose_name_plural = "Группы"
 
     def __str__(self):
         return self.title
@@ -47,7 +51,9 @@ class Post(models.Model):
     )
 
     class Meta:
-        ordering = ["-pub_date"]
+        ordering = ("-pub_date",)
+        verbose_name = "Пост"
+        verbose_name_plural = "Посты"
 
     def __str__(self):
         return self.text[:FIRST_POST_CHARACTERS]
@@ -76,8 +82,12 @@ class Comment(models.Model):
         verbose_name="Дата публикации комментария"
     )
 
+    class Meta:
+        verbose_name = "Комментарий"
+        verbose_name_plural = "Комментарии"
+
     def __str__(self):
-        return self.text
+        return self.text[:FIRST_POST_CHARACTERS]
 
 
 class Follow(models.Model):
@@ -93,3 +103,13 @@ class Follow(models.Model):
         related_name='following',
         verbose_name="Автор"
     )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=["user", "author"],
+                                    name="you_cant_refollow"
+                                    ),
+            models.UniqueConstraint(fields=["author", "user"],
+                                    name="you_cant_on_yourself"
+                                    ),
+        ]

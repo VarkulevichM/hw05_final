@@ -3,16 +3,15 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.views.decorators.cache import cache_page
-from posts.models import Comment
+
 from posts.models import Follow
 from posts.models import Group
 from posts.models import Post
 from posts.models import User
-from .forms import CommentForm
-from .forms import PostForm
-from .utils import func_paginator
-
-VARIABLE_FOR_CACHE_VALUE = 20
+from posts.forms import CommentForm
+from posts.forms import PostForm
+from posts.utils import func_paginator
+from posts.consts import VARIABLE_FOR_CACHE_VALUE
 
 
 # Функция главной страницы
@@ -44,11 +43,13 @@ def profile(request, username):
     author = get_object_or_404(User, username=username)
     posts = author.posts.filter(author=author)
     post_count = posts.count
+
     if request.user.is_authenticated:
         following = Follow.objects.filter(
             user=request.user, author=author).exists()
     else:
         following = False
+
     context = dict(author=author, post_count=post_count, following=following)
     context.update(func_paginator(posts, request))
 
@@ -60,7 +61,7 @@ def post_detail(request, post_id):
     template = "posts/post_detail.html"
     posts = get_object_or_404(Post, pk=post_id)
     author_name = posts.author
-    comments = Comment.objects.filter(post_id=post_id)
+    comments = posts.comments.filter(post_id=post_id)
     post_count = Post.objects.filter(author__username=author_name).count
     form = CommentForm(request.POST)
 
@@ -82,12 +83,13 @@ def post_create(request):
             request.POST,
             files=request.FILES or None
         )
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.author = request.user
-            form.save(request.POST)
-            return redirect("posts:profile", request.user)
-        return render(request, template, {"form": form})
+        if not form.is_valid():
+            return render(request, template, {"form": form})
+        post = form.save(commit=False)
+        post.author = request.user
+        form.save(request.POST)
+        return redirect("posts:profile", request.user)
+
     form = PostForm()
     return render(request, template, {"form": form})
 
