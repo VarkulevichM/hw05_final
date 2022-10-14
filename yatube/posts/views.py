@@ -1,17 +1,17 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.views.decorators.cache import cache_page
 
+from posts.consts import VARIABLE_FOR_CACHE_VALUE
+from posts.forms import CommentForm
+from posts.forms import PostForm
 from posts.models import Follow
 from posts.models import Group
 from posts.models import Post
 from posts.models import User
-from posts.forms import CommentForm
-from posts.forms import PostForm
 from posts.utils import func_paginator
-from posts.consts import VARIABLE_FOR_CACHE_VALUE
 
 
 # Функция главной страницы
@@ -43,12 +43,8 @@ def profile(request, username):
     author = get_object_or_404(User, username=username)
     posts = author.posts.filter(author=author)
     post_count = posts.count
-
-    if request.user.is_authenticated:
-        following = Follow.objects.filter(
+    following = request.user.is_authenticated and Follow.objects.filter(
             user=request.user, author=author).exists()
-    else:
-        following = False
 
     context = dict(author=author, post_count=post_count, following=following)
     context.update(func_paginator(posts, request))
@@ -79,10 +75,7 @@ def post_detail(request, post_id):
 def post_create(request):
     template = "posts/create_post.html"
     if request.method == "POST":
-        form = PostForm(
-            request.POST,
-            files=request.FILES or None
-        )
+        form = PostForm(request.POST, files=request.FILES or None)
         if not form.is_valid():
             return render(request, template, {"form": form})
         post = form.save(commit=False)

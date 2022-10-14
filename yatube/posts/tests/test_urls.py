@@ -3,14 +3,14 @@ from django.test import Client
 from django.test import TestCase
 from http import HTTPStatus
 
+from posts.consts import DESCRIPTION
+from posts.consts import SLUG
+from posts.consts import TEXT
+from posts.consts import TITLE
+from posts.consts import USERNAME
 from posts.models import Group
 from posts.models import Post
 from posts.models import User
-from posts.consts import USERNAME
-from posts.consts import TITLE
-from posts.consts import SLUG
-from posts.consts import DESCRIPTION
-from posts.consts import TEXT
 
 
 class PostURLTests(TestCase):
@@ -39,6 +39,7 @@ class PostURLTests(TestCase):
             f"/posts/{cls.post.id}/edit/": "author",
             "/unexisting_page/": "non-existent"
         }
+
         cls.url_with_templates = {
             "/": "posts/index.html",
             "/group/slug-test/": "posts/group_list.html",

@@ -1,13 +1,13 @@
 from django.test import TestCase
 
+from posts.consts import DESCRIPTION
+from posts.consts import SLUG
+from posts.consts import TEXT
+from posts.consts import TITLE
+from posts.consts import USERNAME
 from posts.models import Group
 from posts.models import Post
 from posts.models import User
-from posts.consts import USERNAME
-from posts.consts import TITLE
-from posts.consts import SLUG
-from posts.consts import DESCRIPTION
-from posts.consts import TEXT
 
 
 class PostModelTest(TestCase):

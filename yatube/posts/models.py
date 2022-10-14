@@ -1,5 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.db.models import F
+from django.db.models import Q
 
 from posts.consts import FIRST_POST_CHARACTERS
 
@@ -94,22 +96,18 @@ class Follow(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='follower',
+        related_name="follower",
         verbose_name="Подписчик"
     )
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='following',
+        related_name="following",
         verbose_name="Автор"
     )
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=["user", "author"],
-                                    name="you_cant_refollow"
-                                    ),
-            models.UniqueConstraint(fields=["author", "user"],
-                                    name="you_cant_on_yourself"
-                                    ),
+            models.UniqueConstraint(fields=["user", "author"], name="unique_follower"),
+            models.CheckConstraint(check=~Q(user=F("author")), name="cant_follow_yourself")
         ]

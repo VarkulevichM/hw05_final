@@ -23,7 +23,9 @@ class PostForm(forms.ModelForm):
     def clean_text(self):
         data = self.cleaned_data["text"]
         if len(data) < 5:
-            raise forms.ValidationError("Пост должен быть длиннее")
+            raise forms.ValidationError(
+                f"Пост должен быть длиннее {len(data)} символов"
+            )
         return data
 
 
