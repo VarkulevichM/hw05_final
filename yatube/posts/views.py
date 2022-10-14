@@ -44,7 +44,7 @@ def profile(request, username):
     posts = author.posts.filter(author=author)
     post_count = posts.count
     following = request.user.is_authenticated and Follow.objects.filter(
-            user=request.user, author=author).exists()
+        user=request.user, author=author).exists()
 
     context = dict(author=author, post_count=post_count, following=following)
     context.update(func_paginator(posts, request))

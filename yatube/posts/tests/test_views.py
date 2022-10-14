@@ -276,7 +276,7 @@ class PaginatorViewsTest(TestCase):
 
         for variable in range(COUNT_POST_PER_PAGE + 1):
             cls.post = Post.objects.create(
-                text=TEXT+str({variable}),
+                text=TEXT + str({variable}),
                 author=cls.user,
                 group=cls.group,
             )

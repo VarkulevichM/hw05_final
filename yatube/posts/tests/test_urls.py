@@ -114,4 +114,7 @@ class PostURLTests(TestCase):
             if access == "non-existent":
                 with self.subTest(url=url):
                     response = self.authorized_author.get(url)
-                    self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
+                    self.assertEqual(
+                        response.status_code,
+                        HTTPStatus.NOT_FOUND
+                    )
