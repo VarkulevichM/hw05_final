@@ -110,12 +110,16 @@ class PostPagesTest(TestCase):
         """URL-адрес использует соответствующий шаблон."""
 
         template_page = {
-            self.url_address["index"]: "posts/index.html",
-            self.url_address["group_list"]: "posts/group_list.html",
-            self.url_address["profile"]: "posts/profile.html",
-            self.url_address["post_detail"]: "posts/post_detail.html",
-            self.url_address["edit_post"]: "posts/create_post.html",
-            self.url_address["create_post"]: "posts/create_post.html",
+            reverse("posts:index"): "posts/index.html",
+            reverse("posts:group_list", kwargs={"slug": self.group.slug}
+                    ): "posts/group_list.html",
+            reverse("posts:profile", kwargs={"username": self.post.author}
+                    ): "posts/profile.html",
+            reverse("posts:post_detail", kwargs={"post_id": self.post.id}
+                    ): "posts/post_detail.html",
+            reverse("posts:edit_post", kwargs={"post_id": self.post.id}
+                    ): "posts/create_post.html",
+            reverse("posts:post_create"): "posts/create_post.html",
         }
 
         for reverse_name, template in template_page.items():
