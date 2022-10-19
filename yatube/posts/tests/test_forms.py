@@ -1,24 +1,23 @@
 import shutil
 import tempfile
-from django.core.files.uploadedfile import SimpleUploadedFile
 from django.conf import settings
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client
-from django.test import override_settings
 from django.test import TestCase
+from django.test import override_settings
 from django.urls import reverse
 
-from posts.consts import ANOTHER_SLUG
-from posts.consts import ANOTHER_USERNAME
-from posts.consts import DESCRIPTION
-from posts.consts import SLUG
-from posts.consts import TEXT
-from posts.consts import TITLE
-from posts.consts import USERNAME
 from posts.models import Comment
 from posts.models import Group
 from posts.models import Post
 from posts.models import User
-
+from posts.tests.consts import ANOTHER_SLUG
+from posts.tests.consts import ANOTHER_USERNAME
+from posts.tests.consts import DESCRIPTION
+from posts.tests.consts import SLUG
+from posts.tests.consts import TEXT
+from posts.tests.consts import TITLE
+from posts.tests.consts import USERNAME
 
 TEMP_MEDIA_ROOT = tempfile.mkdtemp(dir=settings.BASE_DIR)
 

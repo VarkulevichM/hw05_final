@@ -1,16 +1,16 @@
+from http import HTTPStatus
 from django.core.cache import cache
 from django.test import Client
 from django.test import TestCase
-from http import HTTPStatus
 
-from posts.consts import DESCRIPTION
-from posts.consts import SLUG
-from posts.consts import TEXT
-from posts.consts import TITLE
-from posts.consts import USERNAME
 from posts.models import Group
 from posts.models import Post
 from posts.models import User
+from posts.tests.consts import DESCRIPTION
+from posts.tests.consts import SLUG
+from posts.tests.consts import TEXT
+from posts.tests.consts import TITLE
+from posts.tests.consts import USERNAME
 
 
 class PostURLTests(TestCase):

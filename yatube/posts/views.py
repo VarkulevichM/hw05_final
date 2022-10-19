@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
-from django.shortcuts import render
 from django.shortcuts import redirect
+from django.shortcuts import render
 from django.views.decorators.cache import cache_page
 
 from posts.consts import VARIABLE_FOR_CACHE_VALUE
@@ -136,11 +136,10 @@ def follow_index(request):
 def profile_follow(request, username):
     author = get_object_or_404(User, username=username)
     follow = Follow.objects.filter(author=author, user=request.user).exists()
-    if follow or request.user == author:
-        return redirect("posts:profile", username=username)
-    Follow.objects.create(author=author, user=request.user)
-    return redirect("posts:profile", username=username)
 
+    if not follow and request.user != author:
+        Follow.objects.create(author=author, user=request.user)
+    return redirect("posts:profile", username=username)
 
 # Функция отписки на автора
 @login_required
