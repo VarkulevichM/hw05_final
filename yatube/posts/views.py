@@ -141,6 +141,7 @@ def profile_follow(request, username):
         Follow.objects.create(author=author, user=request.user)
     return redirect("posts:profile", username=username)
 
+
 # Функция отписки на автора
 @login_required
 def profile_unfollow(request, username):
