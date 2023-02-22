@@ -13,11 +13,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'qe$=y1-n(-=cmh0f96_0r^*q#bq6-pq#54$&r0^q2#4jfnqnct'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
+    '84.201.159.28',
     '[::1]',
     'testserver',
     "Michman.pythonanywhere.com",
