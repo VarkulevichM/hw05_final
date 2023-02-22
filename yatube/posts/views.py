@@ -56,6 +56,7 @@ def profile(request, username):
 def post_detail(request, post_id):
     template = "posts/post_detail.html"
     posts = get_object_or_404(Post, pk=post_id)
+    request.user
     author_name = posts.author
     comments = posts.comments.filter(post_id=post_id)
     post_count = Post.objects.filter(author__username=author_name).count
